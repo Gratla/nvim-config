@@ -16,3 +16,5 @@ vim.keymap.set("n", "<leader>hp>", function() harpoon:list():prev() end)
 vim.keymap.set("n", "<leader>hn>", function() harpoon:list():next() end)
 
 vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+
+vim.keymap.set("n", "<leader>gs", vim.cmd.Git, { desc = "[g]it [s]tatus" })
