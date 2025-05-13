@@ -163,7 +163,6 @@ vim.opt.confirm = true
 
 vim.opt.colorcolumn = '120'
 
-
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -206,21 +205,20 @@ vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
-vim.keymap.set('x', '<leader>p', "\"_dP")
+vim.keymap.set('x', '<leader>p', '"_dP')
 
-vim.keymap.set('n', '<leader>y', "\"+y")
-vim.keymap.set('v', '<leader>y', "\"+y")
-vim.keymap.set('n', '<leader>Y', "\"+Y")
+vim.keymap.set('n', '<leader>y', '"+y')
+vim.keymap.set('v', '<leader>y', '"+y')
+vim.keymap.set('n', '<leader>Y', '"+Y')
 
-vim.keymap.set("n", "Q", "<nop>")
+vim.keymap.set('n', 'Q', '<nop>')
 
 vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
-
-vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
-vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
-vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
-vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
+vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
+vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
+vim.keymap.set('n', '<leader>k', '<cmd>lnext<CR>zz')
+vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -261,6 +259,12 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
+  {
+    'nvim-java/nvim-java',
+    init = function()
+      require('java').setup()
+    end,
+  },
   'ThePrimeagen/vim-be-good',
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
@@ -698,8 +702,7 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         ts_ls = {},
-        --
-
+        jdtls = {},
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -971,7 +974,7 @@ require('lazy').setup({
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
- },
+    },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
     --
@@ -1031,4 +1034,4 @@ require('lazy').setup({
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 
-require('custom')
+require 'custom'
