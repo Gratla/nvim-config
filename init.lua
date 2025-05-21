@@ -257,13 +257,17 @@ vim.opt.rtp:prepend(lazypath)
 --    :Lazy update
 --
 -- NOTE: Here is where you install your plugins.
+
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   {
     'nvim-java/nvim-java',
-    init = function()
-      require('java').setup()
-    end,
+    dependencies = {
+      { 'williamboman/mason.nvim', opts = {} },
+      'williamboman/mason-lspconfig.nvim',
+      'neovim/nvim-lspconfig',
+      'mfussenegger/nvim-dap',
+    },
   },
   'ThePrimeagen/vim-be-good',
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
@@ -1033,5 +1037,8 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+vim.lsp.enable 'jdtls'
+vim.lsp.config('jdtls', { cmd = { 'jdtls' } })
 
 require 'custom'
