@@ -150,7 +150,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePre', 'TextChanged', 'TextChangedI' }, {
   pattern = '*',
   callback = function()
-    vim.cmd [[%s/\r//ge]]
+    if vim.bo.modifiable then
+      vim.cmd [[%s/\r//ge]]
+    end
   end,
 })
 
