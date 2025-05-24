@@ -40,3 +40,4 @@ vim.keymap.set('n', '<leader>gc', [[:Git commit -am ""<Left>]], { desc = '[g]it 
 vim.keymap.set('n', '<leader>gac', [[:Git commit --amend --all<Enter>]], { desc = '[g]it [a]mend [c]ommit' })
 vim.keymap.set('n', '<leader>gp', [[:Git push<Enter>]], { desc = '[g]it [p]ush' })
 vim.keymap.set('n', '<leader>gd', [[:Git diff<Enter>]], { desc = '[g]it [d]iff' })
+vim.keymap.set('n', '<leader>gl', [[:Git log --oneline<Enter>]], { desc = '[g]it [l]og' })
