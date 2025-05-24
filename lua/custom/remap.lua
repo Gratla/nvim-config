@@ -42,3 +42,5 @@ vim.keymap.set('n', '<leader>gp', [[:Git push<Enter>]], { desc = '[g]it [p]ush' 
 vim.keymap.set('n', '<leader>gd', [[:Git diff<Enter>]], { desc = '[g]it [d]iff' })
 vim.keymap.set('n', '<leader>gl', [[:Git log --oneline<Enter>]], { desc = '[g]it [l]og' })
 vim.keymap.set('n', '<leader>gb', [[:Git blame<Enter>]], { desc = '[g]it [b]lame' })
+vim.keymap.set('n', '<leader>grh', [[:Git reset --hard]], { desc = '[g]it [r]eset [h]ard' })
+vim.keymap.set('n', '<leader>grs', [[:Git reset --soft]], { desc = '[g]it [r]eset [s]oft' })
