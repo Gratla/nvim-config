@@ -179,20 +179,11 @@ vim.opt.rtp:prepend(lazypath)
 --    :Lazy update
 --
 -- NOTE: Here is where you install your plugins.
-
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  {
-    'nvim-java/nvim-java',
-    dependencies = {
-      { 'williamboman/mason.nvim', opts = {} },
-      'williamboman/mason-lspconfig.nvim',
-      'neovim/nvim-lspconfig',
-      'mfussenegger/nvim-dap',
-    },
-  },
   'ThePrimeagen/vim-be-good',
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  'mason-org/mason.nvim',
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -437,6 +428,7 @@ require('lazy').setup({
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
+      'mfussenegger/nvim-jdtls',
     },
     config = function()
       -- Brief aside: **What is LSP?**
@@ -627,8 +619,8 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
-        ts_ls = {},
         jdtls = {},
+        ts_ls = {},
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -679,6 +671,65 @@ require('lazy').setup({
         },
       }
     end,
+    opts = {
+      setup = {
+        jdtls = function(_, opts)
+          vim.api.nvim_create_autocmd('FileType', {
+            pattern = 'java',
+            callback = function()
+              require('lazyvim.util').on_attach(function(_, buffer)
+                vim.keymap.set('n', '<leader>di', "<Cmd>lua require'jdtls'.organize_imports()<CR>", { buffer = buffer, desc = 'Organize Imports' })
+                vim.keymap.set('n', '<leader>dt', "<Cmd>lua require'jdtls'.test_class()<CR>", { buffer = buffer, desc = 'Test Class' })
+                vim.keymap.set('n', '<leader>dn', "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", { buffer = buffer, desc = 'Test Nearest Method' })
+                vim.keymap.set('v', '<leader>de', "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", { buffer = buffer, desc = 'Extract Variable' })
+                vim.keymap.set('n', '<leader>de', "<Cmd>lua require('jdtls').extract_variable()<CR>", { buffer = buffer, desc = 'Extract Variable' })
+                vim.keymap.set('v', '<leader>dm', "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", { buffer = buffer, desc = 'Extract Method' })
+                vim.keymap.set('n', '<leader>cf', '<cmd>lua vim.lsp.buf.formatting()<CR>', { buffer = buffer, desc = 'Format' })
+              end)
+
+              local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
+              -- vim.lsp.set_log_level('DEBUG')
+              local config = {
+                -- The command that starts the language server
+                -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
+                cmd = {
+
+                  'java', -- or '/path/to/java17_or_newer/bin/java'
+                  -- depends on if `java` is in your $PATH env variable and if it points to the right version.
+
+                  '--add-opens',
+                  'java.base/java.util=ALL-UNNAMED',
+                  '-jar',
+                  '-data',
+                  workspace_dir,
+                },
+
+                -- This is the default if not provided, you can remove it. Or adjust as needed.
+                -- One dedicated LSP server & client will be started per unique root_dir
+                root_dir = require('jdtls.setup').find_root { '.git', 'mvnw', 'gradlew' },
+
+                -- Here you can configure eclipse.jdt.ls specific settings
+                -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
+                -- for a list of options
+                settings = {
+                  java = {},
+                },
+                handlers = {
+                  ['language/status'] = function(_, result)
+                    -- print(result)
+                  end,
+                  ['$/progress'] = function(_, result, ctx)
+                    -- disable progress updates.
+                  end,
+                },
+              }
+              require('jdtls').start_or_attach(config)
+            end,
+          })
+          return true
+        end,
+      },
+    },
   },
 
   { -- Autoformat
@@ -959,8 +1010,5 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
-
-vim.lsp.enable 'jdtls'
-vim.lsp.config('jdtls', { cmd = { 'jdtls' } })
 
 require 'custom'
