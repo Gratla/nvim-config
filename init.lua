@@ -76,6 +76,8 @@ vim.opt.confirm = true
 
 vim.opt.colorcolumn = '120'
 
+vim.o.autowriteall = true
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
