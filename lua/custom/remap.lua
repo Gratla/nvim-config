@@ -46,3 +46,44 @@ vim.keymap.set('n', '<leader>gl', [[:Git log --all --decorate --oneline --graph<
 vim.keymap.set('n', '<leader>gb', [[:Git blame<Enter>]], { desc = '[g]it [b]lame' })
 vim.keymap.set('n', '<leader>grh', [[:Git reset --hard]], { desc = '[g]it [r]eset [h]ard' })
 vim.keymap.set('n', '<leader>grs', [[:Git reset --soft]], { desc = '[g]it [r]eset [s]oft' })
+
+local pickers = require 'telescope.pickers'
+local finders = require 'telescope.finders'
+local conf = require('telescope.config').values
+local actions = require 'telescope.actions'
+local action_state = require 'telescope.actions.state'
+
+local function git_branch_switcher()
+  -- Get list of local branches using git
+  local branches = vim.fn.systemlist "git branch --format='%(refname:short)'"
+
+  pickers
+    .new({}, {
+      prompt_title = 'Git Switch or Create Branch',
+      finder = finders.new_table {
+        results = branches,
+      },
+      sorter = conf.generic_sorter {},
+      attach_mappings = function(prompt_bufnr, map)
+        actions.select_default:replace(function()
+          local picker = action_state.get_current_picker(prompt_bufnr)
+          local user_input = picker:_get_prompt()
+
+          actions.close(prompt_bufnr)
+          local selection = action_state.get_selected_entry()
+          local input = (selection and selection[1]) or user_input or vim.fn.input 'Branch name: '
+
+          vim.fn.system(string.format('git show-ref --verify --quiet refs/heads/%s', input))
+          if vim.v.shell_error == 0 then
+            vim.cmd(':Git switch ' .. input)
+          else
+            vim.cmd(':Git switch -c ' .. input)
+          end
+        end)
+        return true
+      end,
+    })
+    :find()
+end
+
+vim.keymap.set('n', '<leader>gn', git_branch_switcher, { desc = '[g]it switch/create bra[n]ch' })
