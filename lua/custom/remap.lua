@@ -55,6 +55,7 @@ local action_state = require 'telescope.actions.state'
 
 local function git_branch_switcher()
   -- Get list of local branches using git
+  vim.cmd ':Git fetch'
   local branches = vim.fn.systemlist "git branch --format='%(refname:short)'"
 
   pickers
