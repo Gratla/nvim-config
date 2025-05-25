@@ -46,6 +46,11 @@ vim.keymap.set('n', '<leader>gl', [[:Git log --all --decorate --oneline --graph<
 vim.keymap.set('n', '<leader>gb', [[:Git blame<Enter>]], { desc = '[g]it [b]lame' })
 vim.keymap.set('n', '<leader>grh', [[:Git reset --hard]], { desc = '[g]it [r]eset [h]ard' })
 vim.keymap.set('n', '<leader>grs', [[:Git reset --soft]], { desc = '[g]it [r]eset [s]oft' })
+local function git_fetch_rebase_master()
+  vim.cmd ':Git fetch'
+  vim.cmd ':Git rebase origin/master'
+end
+vim.keymap.set('n', '<leader>grm', git_fetch_rebase_master, { desc = '[g]it [r]ebase [m]aster' })
 
 local pickers = require 'telescope.pickers'
 local finders = require 'telescope.finders'
