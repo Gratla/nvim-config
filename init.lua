@@ -915,7 +915,7 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
-      -- Simple and easy statusline.
+      -- Simple and statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
       local statusline = require 'mini.statusline'
@@ -930,23 +930,31 @@ require('lazy').setup({
         return '%2l:%-2v'
       end
 
+      -- Override section_git to show the current Git branch
+      statusline.section_git = function()
+        local head = vim.b.gitsigns_head or ''
+        if head ~= '' then
+          return head
+        end
+        return ''
+      end
       -- ... and there is more!
-      --  Check out: https://github.com/echasnovski/mini.nvim
+      --  check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  { -- Highlight, edit, and navigate code
+  { -- highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+    build = ':tsupdate',
+    main = 'nvim-treesitter.configs', -- sets main module to use for opts
+    -- [[ configure treesitter ]] see `:help nvim-treesitter`
     opts = {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
+      -- autoinstall languages that are not installed
       auto_install = true,
       highlight = {
         enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
+        -- some languages depend on vim's regex highlighting system (such as ruby) for indent rules.
+        --  if you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby' },
       },
