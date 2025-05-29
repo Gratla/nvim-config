@@ -78,6 +78,27 @@ return {
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
+      local function get_visual_selection()
+        local _, ls, cs = unpack(vim.fn.getpos "'<")
+        local _, le, ce = unpack(vim.fn.getpos "'>")
+        local lines = vim.fn.getline(ls, le)
+        if #lines == 0 then
+          return ''
+        end
+        lines[#lines] = string.sub(lines[#lines], 1, ce)
+        lines[1] = string.sub(lines[1], cs)
+        return table.concat(lines, '\n')
+      end
+
+      function grep_visual_selection()
+        local text = get_visual_selection()
+        if text and #text > 0 then
+          builtin.grep_string { search = text }
+        end
+      end
+
+      vim.keymap.set('v', '<leader>sw', grep_visual_selection, { desc = '[S]earch current [W]ord' })
+
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
