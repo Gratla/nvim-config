@@ -95,7 +95,18 @@ vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
 vim.keymap.set('n', '<leader>gg', vim.cmd.Git, { desc = '[g]it' })
 vim.keymap.set('n', '<leader>gs', [[:Git status<Enter>]], { desc = '[g]it [s]tatus' })
 vim.keymap.set('n', '<leader>gaa', [[:Git add -A<Enter>]], { desc = '[g]it [a]dd [a]ll' })
-vim.keymap.set('n', '<leader>gc', [[:Git commit -am ""<Left>]], { desc = '[g]it [c]ommit' })
+local function git_commit_with_ticket()
+  local result = vim.system({ 'git', 'rev-parse', '--abbrev-ref', 'HEAD' }):wait()
+  local branch_name = vim.trim(result.stdout)
+  local ticket_name = branch_name:match '([^/]+)'
+  local commit_message_prefix = ''
+  if ticket_name ~= nil and ticket_name ~= 'master' then
+    commit_message_prefix = ticket_name .. ': '
+  end
+  local commit_cmd = ':Git commit -am "' .. commit_message_prefix .. '"<Left>'
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(commit_cmd, true, false, true), 'n', true)
+end
+vim.keymap.set('n', '<leader>gc', git_commit_with_ticket, { desc = '[g]it [c]ommit' })
 vim.keymap.set('n', '<leader>gac', [[:Git commit --amend --all<Enter>]], { desc = '[g]it [a]mend [c]ommit' })
 vim.keymap.set('n', '<leader>gp', [[:Git push<Enter>]], { desc = '[g]it [p]ush' })
 vim.keymap.set('n', '<leader>gfp', [[:Git push --force-with-lease]], { desc = '[g]it [f]orce (with lease) [p]ush' })
