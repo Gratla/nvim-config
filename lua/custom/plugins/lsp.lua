@@ -410,7 +410,7 @@ return {
     opts = {
       keymap = {
         -- 'default' (recommended) for mappings similar to built-in completions
-        --   <c-y> to accept ([y]es) the completion.
+        --   <c-z> to accept (yes) the completion.
         --    This will auto-import if your LSP supports it.
         --    This will expand snippets if the LSP sent a snippet.
         -- 'super-tab' for tab to accept
