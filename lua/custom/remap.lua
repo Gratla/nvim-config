@@ -92,7 +92,22 @@ end)
 vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
 
 -- Git
-vim.keymap.set('n', '<leader>gg', vim.cmd.Git, { desc = '[g]it' })
+local function open_or_reuse_fugitive()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    local name = vim.api.nvim_buf_get_name(buf)
+    if name:match '^fugitive://' then
+      vim.api.nvim_set_current_win(win)
+    end
+  end
+end
+
+local function open_fugitive()
+  open_or_reuse_fugitive()
+  vim.cmd 'Git'
+end
+vim.keymap.set('n', '<leader>gg', open_fugitive, { desc = '[g]it' })
+
 vim.keymap.set('n', '<leader>gs', [[:Git status<Enter>]], { desc = '[g]it [s]tatus' })
 vim.keymap.set('n', '<leader>gaa', [[:Git add -A<Enter>]], { desc = '[g]it [a]dd [a]ll' })
 local function git_commit_with_ticket()
@@ -111,7 +126,15 @@ vim.keymap.set('n', '<leader>gac', [[:Git commit --amend --all<Enter>]], { desc 
 vim.keymap.set('n', '<leader>gp', [[:Git push<Enter>]], { desc = '[g]it [p]ush' })
 vim.keymap.set('n', '<leader>gfp', [[:Git push --force-with-lease]], { desc = '[g]it [f]orce (with lease) [p]ush' })
 vim.keymap.set('n', '<leader>gu', [[:Git pull<Enter>]], { desc = '[g]it [u]pdate (pull)' })
-vim.keymap.set('n', '<leader>gd', [[:Git diff<Enter>]], { desc = '[g]it [d]iff' })
+
+local function git_diff()
+  local current_file = vim.fn.expand '%'
+  open_or_reuse_fugitive()
+  vim.cmd 'Git'
+  vim.fn.search(current_file, 'cw')
+  vim.api.nvim_input '='
+end
+vim.keymap.set('n', '<leader>gd', git_diff, { desc = '[g]it [d]iff' })
 vim.keymap.set('n', '<leader>gl', [[:Git log --all --decorate --oneline --graph<Enter>]], { desc = '[g]it [l]og' })
 vim.keymap.set('n', '<leader>gb', [[:Git blame<Enter>]], { desc = '[g]it [b]lame' })
 vim.keymap.set('n', '<leader>grh', [[:Git reset --hard]], { desc = '[g]it [r]eset [h]ard' })
