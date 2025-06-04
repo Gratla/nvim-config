@@ -191,6 +191,8 @@ vim.keymap.set('n', '<leader>gn', git_branch_switcher, { desc = '[g]it switch/cr
 vim.keymap.set('n', '<leader>lj', function()
   vim.fn.system '~/.config/tmux/scripts/tmux-windowizer java-run'
 
-  local command = vim.api.nvim_replace_termcodes('tmux send-keys -t java-run "echo \'test\'"<Enter>', true, false, true)
-  vim.fn.system(command)
+  local run_command = 'mvn package && java -cp target/mvn-test-1.0-SNAPSHOT.jar com.example.app.App'
+  local full_command = string.format('tmux send-keys -t java-run "%s"<Enter>', run_command)
+  local system_command = vim.api.nvim_replace_termcodes(full_command, true, false, true)
+  vim.fn.system(system_command)
 end, { desc = 'java run app' })
