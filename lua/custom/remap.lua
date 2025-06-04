@@ -186,3 +186,11 @@ local function git_branch_switcher()
 end
 
 vim.keymap.set('n', '<leader>gn', git_branch_switcher, { desc = '[g]it switch/create bra[n]ch' })
+
+-- Java
+vim.keymap.set('n', '<leader>lj', function()
+  vim.fn.system '~/.config/tmux/scripts/tmux-windowizer java-run'
+
+  local command = vim.api.nvim_replace_termcodes('tmux send-keys -t java-run "echo \'test\'"<Enter>', true, false, true)
+  vim.fn.system(command)
+end, { desc = 'java run app' })
