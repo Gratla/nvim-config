@@ -48,7 +48,7 @@ vim.keymap.set('n', '<leader>Y', '"+Y')
 
 vim.keymap.set('n', 'Q', '<nop>')
 
-vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+vim.keymap.set('n', '<leader>rr', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
 vim.keymap.set('n', '<C-k>', '<cmd>cnext<CR>zz')
 vim.keymap.set('n', '<C-j>', '<cmd>cprev<CR>zz')
@@ -195,6 +195,20 @@ vim.keymap.set('n', '<leader>gn', git_branch_switcher, { desc = '[g]it switch/cr
 
 vim.keymap.set('n', '<leader>gir', ':Gitsigns reset_hunk<Enter>', { desc = '[g]it [i]line [r]eset hunk' })
 vim.keymap.set('n', '<leader>gip', ':Gitsigns preview_hunk<Enter>', { desc = '[g]it [i]line [p]review hunk' })
+
+-- Refactoring
+
+vim.keymap.set('x', '<leader>re', ':Refactor extract<Enter>', { desc = '[r]efactor [e]xtract' })
+vim.keymap.set('x', '<leader>rf', ':Refactor extract_to_file<Enter>', { desc = '[r]efactor extract to [f]ile' })
+
+vim.keymap.set('x', '<leader>rv', ':Refactor extract_var<Enter>', { desc = '[r]efactor [e]xtract [v]ar' })
+
+vim.keymap.set('x', '<leader>ri', ':Refactor inline_var<Enter>', { desc = '[r]efactor [i]nline var' })
+
+vim.keymap.set('x', '<leader>rI', ':Refactor inline_func<Enter>', { desc = '[r]efactor [I]nline function' })
+
+vim.keymap.set('x', '<leader>rb', ':Refactor extract_block<Enter>', { desc = '[r]efactor extract [b]lock' })
+vim.keymap.set('x', '<leader>rbf', ':Refactor extract_block_to_file<Enter>', { desc = '[r]efactor extract [b]lock to [f]ile' })
 
 -- Java
 vim.keymap.set('n', '<leader>lj', function()
