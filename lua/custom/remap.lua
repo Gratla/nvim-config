@@ -57,6 +57,10 @@ vim.keymap.set('n', '<leader>j', '<cmd>lprev<CR>zz')
 
 vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
 
+-- Reset default view
+
+vim.keymap.set('n', '<leader>pd', ':%bd|e#<Enter>', { desc = '[p]repare [d]efault view' })
+
 -- Remap Harpoon
 local harpoon = require 'harpoon'
 harpoon:setup()
