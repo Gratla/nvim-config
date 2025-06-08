@@ -191,6 +191,10 @@ end
 
 vim.keymap.set('n', '<leader>gn', git_branch_switcher, { desc = '[g]it switch/create bra[n]ch' })
 
+-- Git signs
+
+vim.keymap.set('n', '<leader>gir', ':Gitsigns reset_hunk<Enter>', { desc = '[g]it [i]line [r]eset hunk' })
+
 -- Java
 vim.keymap.set('n', '<leader>lj', function()
   vim.fn.system '~/.config/tmux/scripts/tmux-windowizer java-run'
