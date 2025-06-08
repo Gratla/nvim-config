@@ -194,6 +194,7 @@ vim.keymap.set('n', '<leader>gn', git_branch_switcher, { desc = '[g]it switch/cr
 -- Git signs
 
 vim.keymap.set('n', '<leader>gir', ':Gitsigns reset_hunk<Enter>', { desc = '[g]it [i]line [r]eset hunk' })
+vim.keymap.set('n', '<leader>gip', ':Gitsigns preview_hunk<Enter>', { desc = '[g]it [i]line [p]review hunk' })
 
 -- Java
 vim.keymap.set('n', '<leader>lj', function()
