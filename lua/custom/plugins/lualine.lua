@@ -60,7 +60,8 @@ return {
         },
       },
       lualine_b = {
-        { 'branch', icon = icons.git.branch, 'diff', 'diagnostics', 'filename' },
+        { 'branch', icon = icons.git.branch },
+        'filename',
       },
       lualine_c = {
         { '%=', padding = 0 },
