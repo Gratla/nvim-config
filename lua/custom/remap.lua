@@ -214,7 +214,7 @@ vim.keymap.set('x', '<leader>rbf', ':Refactor extract_block_to_file<Enter>', { d
 vim.keymap.set('n', '<leader>lj', function()
   vim.fn.system '~/.config/tmux/scripts/tmux-windowizer java-run'
 
-  local run_command = 'mvn package && java -cp target/mvn-test-1.0-SNAPSHOT.jar com.example.app.App'
+  local run_command = 'mvn package && java -jar $(ls target/*.jar)'
   local full_command = string.format('tmux send-keys -t java-run "%s"<Enter>', run_command)
   local system_command = vim.api.nvim_replace_termcodes(full_command, true, false, true)
   vim.fn.system(system_command)
