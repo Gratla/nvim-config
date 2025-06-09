@@ -212,19 +212,19 @@ vim.keymap.set('x', '<leader>rbf', ':Refactor extract_block_to_file<Enter>', { d
 
 -- Java
 vim.keymap.set('n', '<leader>mr', function()
-  vim.fn.system '~/.config/tmux/scripts/tmux-windowizer mvn-run'
+  vim.fn.system '~/.config/tmux/scripts/tmux-windowizer run'
 
   local run_command = 'mvn package && java -jar $(ls target/*.jar)'
-  local full_command = string.format('tmux send-keys -t mvn-run "%s"<Enter>', run_command)
+  local full_command = string.format('tmux send-keys -t run "%s"<Enter>', run_command)
   local system_command = vim.api.nvim_replace_termcodes(full_command, true, false, true)
   vim.fn.system(system_command)
 end, { desc = '[m]nv [r]un' })
 
 vim.keymap.set('n', '<leader>mT', function()
-  vim.fn.system '~/.config/tmux/scripts/tmux-windowizer mvn-test'
+  vim.fn.system '~/.config/tmux/scripts/tmux-windowizer test'
 
   local run_command = 'mvn test'
-  local full_command = string.format('tmux send-keys -t mvn-test "%s"<Enter>', run_command)
+  local full_command = string.format('tmux send-keys -t test "%s"<Enter>', run_command)
   local system_command = vim.api.nvim_replace_termcodes(full_command, true, false, true)
   vim.fn.system(system_command)
 end, { desc = '[m]vn [T]est all' })
