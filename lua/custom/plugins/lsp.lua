@@ -1,3 +1,5 @@
+vim.lsp.enable 'kotlin_lsp'
+
 return {
   -- LSP Plugins
   {
@@ -220,7 +222,6 @@ return {
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         jdtls = {},
-        kotlin_lsp = {},
         -- ts_ls = {},
         lua_ls = {
           -- cmd = { ... },
