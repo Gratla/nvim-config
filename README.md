@@ -12,3 +12,14 @@ The following things need to be installed in addition to this config:
 - java
 - kotlin-lsp
 - Jetbrains Font (and setup in terminal)
+
+
+### Install kotlin-lsp
+
+Install the kotlin-lsp in your `.config` folder:
+
+```
+sudo apt install socat netcat
+git clone git@github.com:Kotlin/kotlin-lsp.git
+ln -s $KOTLIN_LSP_DIR/kotlin-lsp.sh $HOME/.local/bin/kotlin-lsp
+```
