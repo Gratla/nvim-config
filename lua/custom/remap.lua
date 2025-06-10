@@ -224,3 +224,6 @@ end, { desc = '[m]nv [r]un' })
 vim.keymap.set('n', '<leader>tn', ':TestNearest -strategy=neovim_sticky <Enter>', { desc = '[t]est [n]earest' })
 vim.keymap.set('n', '<leader>ta', ':TestSuite -strategy=neovim_sticky <Enter>', { desc = '[t]est [a]ll' })
 vim.keymap.set('n', '<leader>tv', ':TestVisit<Enter>', { desc = '[t]est [v]isit' })
+
+-- Reset
+vim.keymap.set('n', '<leader>wr', '<cmd>wincmd t | wincmd l | only<CR>', { desc = '[w]indow [r]eset' })
