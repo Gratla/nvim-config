@@ -293,7 +293,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- sets main module to use for opts
     -- [[ configure treesitter ]] see `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'kotlin' },
       -- autoinstall languages that are not installed
       auto_install = true,
       highlight = {
