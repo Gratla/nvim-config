@@ -228,3 +228,8 @@ vim.keymap.set('n', '<leader>mT', function()
   local system_command = vim.api.nvim_replace_termcodes(full_command, true, false, true)
   vim.fn.system(system_command)
 end, { desc = '[m]vn [T]est all' })
+
+-- Testing
+vim.keymap.set('n', '<leader>tn', ':TestNearest -strategy=neovim_sticky <Enter>', { desc = '[t]est [n]earest' })
+vim.keymap.set('n', '<leader>ta', ':TestSuite -strategy=neovim_sticky <Enter>', { desc = '[t]est [a]ll' })
+vim.keymap.set('n', '<leader>tv', ':TestVisit<Enter>', { desc = '[t]est [v]isit' })
