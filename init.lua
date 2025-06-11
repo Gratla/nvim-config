@@ -74,7 +74,7 @@ vim.opt.scrolloff = 10
 -- See `:help 'confirm'`
 vim.opt.confirm = true
 
-vim.opt.colorcolumn = '120'
+-- vim.opt.colorcolumn = '120'
 
 vim.o.autowriteall = true
 
@@ -362,5 +362,7 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+vim.cmd 'highlight Normal guibg=NONE ctermbg=NONE'
 
 require 'custom'
