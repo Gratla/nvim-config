@@ -76,6 +76,9 @@ vim.opt.confirm = true
 
 -- vim.opt.colorcolumn = '120'
 
+vim.opt.spelllang = 'de,en'
+vim.opt.spell = true
+
 vim.o.autowriteall = true
 
 -- [[ Basic Autocommands ]]
