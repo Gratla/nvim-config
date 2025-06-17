@@ -210,15 +210,17 @@ vim.keymap.set('x', '<leader>rI', ':Refactor inline_func<Enter>', { desc = '[r]e
 vim.keymap.set('x', '<leader>rb', ':Refactor extract_block<Enter>', { desc = '[r]efactor extract [b]lock' })
 vim.keymap.set('x', '<leader>rbf', ':Refactor extract_block_to_file<Enter>', { desc = '[r]efactor extract [b]lock to [f]ile' })
 
--- Java
-vim.keymap.set('n', '<leader>mr', function()
-  vim.fn.system '~/.config/tmux/scripts/tmux-windowizer run'
-
-  local run_command = 'mvn package && java -jar $(ls target/*.jar)'
-  local full_command = string.format('tmux send-keys -t run "%s"<Enter>', run_command)
+-- Run Configs
+local function send_cmd_to_tmux(window_name, cmd)
+  vim.fn.system('~/.config/tmux/scripts/tmux-windowizer ' .. window_name)
+  local full_command = string.format('tmux send-keys -t %s "%s"<Enter>', window_name, cmd)
   local system_command = vim.api.nvim_replace_termcodes(full_command, true, false, true)
   vim.fn.system(system_command)
-end, { desc = '[m]nv [r]un' })
+end
+
+vim.keymap.set('n', '<leader>xm', function()
+  send_cmd_to_tmux('mvn', 'mvn package && java -jar $(ls target/*.jar)')
+end, { desc = 'e[x]ecute [m]nv' })
 
 -- Testing
 vim.keymap.set('n', '<leader>tn', ':TestNearest -strategy=neovim_sticky <Enter>', { desc = '[t]est [n]earest' })
