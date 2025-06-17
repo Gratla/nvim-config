@@ -213,7 +213,7 @@ vim.keymap.set('x', '<leader>rbf', ':Refactor extract_block_to_file<Enter>', { d
 -- Run Configs
 local function send_cmd_to_tmux(window_name, cmd)
   vim.fn.system('~/.config/tmux/scripts/tmux-windowizer ' .. window_name)
-  local full_command = string.format('tmux send-keys -t %s "%s"<Enter>', window_name, cmd)
+  local full_command = string.format('tmux send-keys -t "%s" "%s"<Enter>', window_name, cmd)
   local system_command = vim.api.nvim_replace_termcodes(full_command, true, false, true)
   vim.fn.system(system_command)
 end
@@ -221,6 +221,10 @@ end
 vim.keymap.set('n', '<leader>xm', function()
   send_cmd_to_tmux('mvn', 'mvn package && java -jar $(ls target/*.jar)')
 end, { desc = 'e[x]ecute [m]nv' })
+
+vim.keymap.set('n', '<leader>xn', function()
+  send_cmd_to_tmux('npm_start', 'npm start')
+end, { desc = 'e[x]ecute [n]pm start' })
 
 -- Testing
 vim.keymap.set('n', '<leader>tn', ':TestNearest -strategy=neovim_sticky <Enter>', { desc = '[t]est [n]earest' })
