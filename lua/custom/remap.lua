@@ -121,11 +121,10 @@ vim.api.nvim_create_autocmd('User', {
   end,
 })
 
-local function open_fugitive()
-  open_or_reuse_fugitive()
-  vim.cmd 'Git'
-end
-vim.keymap.set('n', '<leader>gg', open_fugitive, { desc = '[g]it' })
+local floaterminal = require 'custom.floaterminal'
+vim.keymap.set('n', '<leader>gg', function()
+  floaterminal.toggle_terminal { cmd = ':Git' }
+end, { desc = '[g]it' })
 
 vim.keymap.set('n', '<leader>gs', [[:Git status<Enter>]], { desc = '[g]it [s]tatus' })
 vim.keymap.set('n', '<leader>gaa', [[:Git add -A<Enter>]], { desc = '[g]it [a]dd [a]ll' })

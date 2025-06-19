@@ -1,3 +1,4 @@
+local floaterminal = {}
 vim.keymap.set('t', '<esc><esc>', '<c-\\><c-n>')
 
 local state = {
@@ -8,7 +9,7 @@ local state = {
   },
 }
 
-function create_floating_window(opts)
+floaterminal.create_floating_window = function(opts)
   opts = opts or {}
   local width_ratio = opts.width_ratio or 0.8
   local height_ratio = opts.height_ratio or 0.8
@@ -63,13 +64,15 @@ function create_floating_window(opts)
   return { buf = buf, win = win, cmd = opts.cmd }
 end
 
-local toggle_terminal = function()
+floaterminal.toggle_terminal = function(opts)
   if not vim.api.nvim_win_is_valid(state.floating.win) then
-    state.floating = create_floating_window { buf = state.floating.buf }
+    state.floating = floaterminal.create_floating_window { buf = state.floating.buf, cmd = opts.cmd }
   else
     vim.api.nvim_win_hide(state.floating.win)
   end
 end
 
-vim.api.nvim_create_user_command('Floaterminal', toggle_terminal, {})
-vim.keymap.set({ 'n', 't' }, '<leader>tt', toggle_terminal, { desc = '[t]oggle [t]erminal' })
+vim.api.nvim_create_user_command('Floaterminal', floaterminal.toggle_terminal, {})
+vim.keymap.set({ 'n', 't' }, '<leader>tt', floaterminal.toggle_terminal, { desc = '[t]oggle [t]erminal' })
+
+return floaterminal
