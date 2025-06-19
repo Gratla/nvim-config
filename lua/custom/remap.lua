@@ -106,6 +106,21 @@ local function open_or_reuse_fugitive()
   end
 end
 
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'FugitiveChanged',
+  desc = 'Update fugitive index',
+  group = vim.api.nvim_create_augroup('update_fugitive_index', { clear = true }),
+  callback = function()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      local name = vim.api.nvim_buf_get_name(buf)
+      if name:match '^fugitive://' then
+        vim.cmd 'edit'
+      end
+    end
+  end,
+})
+
 local function open_fugitive()
   open_or_reuse_fugitive()
   vim.cmd 'Git'
