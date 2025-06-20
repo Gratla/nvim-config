@@ -1,8 +1,6 @@
 local floaterminal = {}
 vim.keymap.set('t', '<esc><esc>', '<c-\\><c-n>')
 
-local states = {}
-
 floaterminal.create_floating_window = function(opts)
   opts = opts or {}
   local width_ratio = opts.width_ratio or 0.8
@@ -23,9 +21,7 @@ floaterminal.create_floating_window = function(opts)
 
   -- Create a new (scratch) buffer
   local buf = nil
-  if vim.api.nvim_buf_is_valid(opts.buf) then
-    buf = opts.buf
-  elseif opts.cmd and vim.startswith(opts.cmd, ':') then
+  if opts.cmd and vim.startswith(opts.cmd, ':') then
     vim.cmd(opts.cmd:sub(2))
     buf = vim.api.nvim_get_current_buf()
   else
@@ -44,37 +40,24 @@ floaterminal.create_floating_window = function(opts)
   }
 
   -- Create the floating window
-  local win = vim.api.nvim_open_win(buf, true, window_opts)
+  vim.api.nvim_open_win(buf, true, window_opts)
 
   if (not opts.cmd or not vim.startswith(opts.cmd, ':')) and vim.bo[buf].buftype ~= 'terminal' then
     vim.cmd.terminal()
   end
 
-  if opts.cmd ~= '' and vim.bo[buf].buftype == 'terminal' then
+  if vim.bo[buf].buftype == 'terminal' then
     local chan_id = vim.b[buf].terminal_job_id
-    vim.api.nvim_chan_send(chan_id, opts.cmd .. '\n')
+    if opts.cmd ~= '' then
+      vim.api.nvim_chan_send(chan_id, 'tmux new-session -A -s ' .. opts.tmux_session_name .. ' -- "' .. opts.cmd .. '; bash"\n')
+    else
+      vim.api.nvim_chan_send(chan_id, 'tmux new-session -A -s ' .. opts.tmux_session_name .. '\n')
+    end
   end
-
-  return { buf = buf, win = win, cmd = opts.cmd }
 end
 
 floaterminal.toggle_terminal = function(tmux_session_name, cmd)
-  local current_state = states[tmux_session_name]
-  -- TODO: attach commands to a named tmux session and therefore allow multiple windows
-  if current_state == nil then
-    current_state = {
-      tmux_session_name = tmux_session_name,
-      buf = -1,
-      win = -1,
-      cmd = cmd or '',
-    }
-  end
-
-  if not vim.api.nvim_win_is_valid(current_state.win) then
-    states[tmux_session_name] = floaterminal.create_floating_window { buf = current_state.buf, cmd = current_state.cmd }
-  else
-    vim.api.nvim_win_hide(current_state.win)
-  end
+  floaterminal.create_floating_window { cmd = cmd or '', tmux_session_name = tmux_session_name }
 end
 
 vim.api.nvim_create_user_command('Floaterminal', function()

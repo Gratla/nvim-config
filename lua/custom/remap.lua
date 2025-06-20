@@ -235,7 +235,7 @@ local function send_cmd_to_tmux(window_name, cmd)
 end
 
 vim.keymap.set('n', '<leader>xm', function()
-  send_cmd_to_tmux('mvn', 'mvn package && java -jar $(ls target/*.jar)')
+  floaterminal.toggle_terminal('mvn', 'mvn package && java -jar $(ls target/*.jar)')
 end, { desc = 'e[x]ecute [m]nv' })
 
 vim.keymap.set('n', '<leader>xn', function()
