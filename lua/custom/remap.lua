@@ -123,7 +123,7 @@ vim.api.nvim_create_autocmd('User', {
 
 local floaterminal = require 'custom.floaterminal'
 vim.keymap.set('n', '<leader>gg', function()
-  floaterminal.toggle_terminal { cmd = ':Git' }
+  floaterminal.toggle_terminal('git', ':Git')
 end, { desc = '[g]it' })
 
 vim.keymap.set('n', '<leader>gs', [[:Git status<Enter>]], { desc = '[g]it [s]tatus' })
@@ -153,7 +153,9 @@ local function git_diff()
   vim.api.nvim_input '='
 end
 vim.keymap.set('n', '<leader>gd', git_diff, { desc = '[g]it [d]iff' })
-vim.keymap.set('n', '<leader>gl', [[:Git log --all --decorate --oneline --graph<Enter>]], { desc = '[g]it [l]og' })
+vim.keymap.set('n', '<leader>gl', function()
+  floaterminal.toggle_terminal('git log', ':Git log --all --decorate --oneline --graph')
+end, { desc = '[g]it [l]og' })
 vim.keymap.set('n', '<leader>gb', [[:Git blame<Enter>]], { desc = '[g]it [b]lame' })
 vim.keymap.set('n', '<leader>grh', [[:Git reset --hard]], { desc = '[g]it [r]eset [h]ard' })
 vim.keymap.set('n', '<leader>grs', [[:Git reset --soft]], { desc = '[g]it [r]eset [s]oft' })

@@ -1,13 +1,7 @@
 local floaterminal = {}
 vim.keymap.set('t', '<esc><esc>', '<c-\\><c-n>')
 
-local state = {
-  floating = {
-    buf = -1,
-    win = -1,
-    cmd = nil,
-  },
-}
+local states = {}
 
 floaterminal.create_floating_window = function(opts)
   opts = opts or {}
@@ -56,7 +50,7 @@ floaterminal.create_floating_window = function(opts)
     vim.cmd.terminal()
   end
 
-  if opts.cmd and vim.bo[buf].buftype == 'terminal' then
+  if opts.cmd ~= '' and vim.bo[buf].buftype == 'terminal' then
     local chan_id = vim.b[buf].terminal_job_id
     vim.api.nvim_chan_send(chan_id, opts.cmd .. '\n')
   end
@@ -64,15 +58,30 @@ floaterminal.create_floating_window = function(opts)
   return { buf = buf, win = win, cmd = opts.cmd }
 end
 
-floaterminal.toggle_terminal = function(opts)
-  if not vim.api.nvim_win_is_valid(state.floating.win) then
-    state.floating = floaterminal.create_floating_window { buf = state.floating.buf, cmd = opts.cmd }
+floaterminal.toggle_terminal = function(tmux_session_name, cmd)
+  local current_state = states[tmux_session_name]
+  -- TODO: attach commands to a named tmux session and therefore allow multiple windows
+  if current_state == nil then
+    current_state = {
+      tmux_session_name = tmux_session_name,
+      buf = -1,
+      win = -1,
+      cmd = cmd or '',
+    }
+  end
+
+  if not vim.api.nvim_win_is_valid(current_state.win) then
+    states[tmux_session_name] = floaterminal.create_floating_window { buf = current_state.buf, cmd = current_state.cmd }
   else
-    vim.api.nvim_win_hide(state.floating.win)
+    vim.api.nvim_win_hide(current_state.win)
   end
 end
 
-vim.api.nvim_create_user_command('Floaterminal', floaterminal.toggle_terminal, {})
-vim.keymap.set({ 'n', 't' }, '<leader>tt', floaterminal.toggle_terminal, { desc = '[t]oggle [t]erminal' })
+vim.api.nvim_create_user_command('Floaterminal', function()
+  floaterminal.toggle_terminal 'terminal'
+end, {})
+vim.keymap.set({ 'n', 't' }, '<leader>tt', function()
+  floaterminal.toggle_terminal 'terminal'
+end, { desc = '[t]oggle [t]erminal' })
 
 return floaterminal
