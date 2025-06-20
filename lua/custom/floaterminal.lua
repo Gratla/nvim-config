@@ -1,10 +1,10 @@
 local floaterminal = {}
 vim.keymap.set('t', '<esc><esc>', '<c-\\><c-n>')
 
-floaterminal.create_floating_window = function(opts)
-  opts = opts or {}
-  local width_ratio = opts.width_ratio or 0.8
-  local height_ratio = opts.height_ratio or 0.8
+floaterminal.create_floating_window = function(tmux_session_name, cmd)
+  local opts = { tmux_session_name = tmux_session_name, cmd = cmd or '' }
+  local width_ratio = 0.8
+  local height_ratio = 0.8
 
   -- Get the editor's current dimensions
   local ui = vim.api.nvim_list_uis()[1]
@@ -61,15 +61,11 @@ floaterminal.create_floating_window = function(opts)
   end
 end
 
-floaterminal.toggle_terminal = function(tmux_session_name, cmd)
-  floaterminal.create_floating_window { cmd = cmd or '', tmux_session_name = tmux_session_name }
-end
-
 vim.api.nvim_create_user_command('Floaterminal', function()
-  floaterminal.toggle_terminal 'terminal'
+  floaterminal.create_floating_window 'terminal'
 end, {})
 vim.keymap.set({ 'n', 't' }, '<leader>tt', function()
-  floaterminal.toggle_terminal 'terminal'
+  floaterminal.create_floating_window 'terminal'
 end, { desc = '[t]oggle [t]erminal' })
 
 return floaterminal

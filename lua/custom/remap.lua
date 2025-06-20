@@ -123,7 +123,7 @@ vim.api.nvim_create_autocmd('User', {
 
 local floaterminal = require 'custom.floaterminal'
 vim.keymap.set('n', '<leader>gg', function()
-  floaterminal.toggle_terminal('git', ':Git')
+  floaterminal.create_floating_window('git', ':Git')
 end, { desc = '[g]it' })
 
 vim.keymap.set('n', '<leader>gs', [[:Git status<Enter>]], { desc = '[g]it [s]tatus' })
@@ -154,7 +154,7 @@ local function git_diff()
 end
 vim.keymap.set('n', '<leader>gd', git_diff, { desc = '[g]it [d]iff' })
 vim.keymap.set('n', '<leader>gl', function()
-  floaterminal.toggle_terminal('git log', ':Git log --all --decorate --oneline --graph')
+  floaterminal.create_floating_window('git log', ':Git log --all --decorate --oneline --graph')
 end, { desc = '[g]it [l]og' })
 vim.keymap.set('n', '<leader>gb', [[:Git blame<Enter>]], { desc = '[g]it [b]lame' })
 vim.keymap.set('n', '<leader>grh', [[:Git reset --hard]], { desc = '[g]it [r]eset [h]ard' })
@@ -235,7 +235,7 @@ local function send_cmd_to_tmux(window_name, cmd)
 end
 
 vim.keymap.set('n', '<leader>xm', function()
-  floaterminal.toggle_terminal('mvn', 'mvn package && java -jar $(ls target/*.jar)')
+  floaterminal.create_floating_window('mvn', 'mvn package && java -jar $(ls target/*.jar)')
 end, { desc = 'e[x]ecute [m]nv' })
 
 vim.keymap.set('n', '<leader>xn', function()
