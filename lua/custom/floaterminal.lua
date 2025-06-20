@@ -24,6 +24,11 @@ floaterminal.create_floating_window = function(opts)
   if opts.cmd and vim.startswith(opts.cmd, ':') then
     vim.cmd(opts.cmd:sub(2))
     buf = vim.api.nvim_get_current_buf()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      if vim.api.nvim_win_get_buf(win) == buf then
+        vim.api.nvim_win_close(win, false)
+      end
+    end
   else
     buf = vim.api.nvim_create_buf(false, true)
   end
