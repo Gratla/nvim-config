@@ -45,7 +45,15 @@ floaterminal.create_floating_window = function(tmux_session_name, cmd)
   }
 
   -- Create the floating window
-  vim.api.nvim_open_win(buf, true, window_opts)
+  local win = vim.api.nvim_open_win(buf, true, window_opts)
+
+  vim.api.nvim_create_autocmd('WinLeave', {
+    pattern = '*',
+    callback = function()
+      vim.api.nvim_win_close(win, true)
+    end,
+    once = true,
+  })
 
   if (not opts.cmd or not vim.startswith(opts.cmd, ':')) and vim.bo[buf].buftype ~= 'terminal' then
     vim.cmd.terminal()
