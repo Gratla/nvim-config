@@ -97,6 +97,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Autosave after text changed
+vim.api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged' }, {
+  pattern = '*',
+  callback = function()
+    if vim.bo.modified and vim.bo.filetype ~= '' and vim.fn.expand '%' ~= '' then
+      vim.cmd 'silent write'
+    end
+  end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
